@@ -1,0 +1,56 @@
+<main class="container">
+  <h1>Generador de QR</h1>
+
+  <section class="card">
+    <form class="form" (ngSubmit)="onGenerate()" autocomplete="off">
+      <label for="urlInput">URL</label>
+      <input
+        id="urlInput"
+        name="url"
+        type="url"
+        inputmode="url"
+        placeholder="https://ejemplo.com"
+        [(ngModel)]="url"
+        required
+      />
+
+      <div class="row">
+        <div class="field">
+          <label for="format">Formato</label>
+          <select id="format" name="format" [(ngModel)]="format">
+            <option value="png">PNG</option>
+            <option value="svg">SVG</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="size">Tamaño (px)</label>
+          <select id="size" name="size" [(ngModel)]="size">
+            @for (px of sizeOptions; track px) {
+              <option [ngValue]="px">{{ px }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Generando...' : 'Generar QR' }}
+      </button>
+
+      <p class="status" [class.success]="statusKind === 'success'" [class.error]="statusKind === 'error'">
+        {{ statusMessage }}
+      </p>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="preview">
+      <img *ngIf="qrSrc" [src]="qrSrc" alt="QR generado" />
+    </div>
+    <div class="actions">
+      <a *ngIf="downloadHref" class="btn secondary" [href]="downloadHref" [download]="downloadName">
+        Guardar imagen
+      </a>
+    </div>
+  </section>
+</main>
